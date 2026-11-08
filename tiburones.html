@@ -1,0 +1,263 @@
+<title>Más antiguos que los árboles</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one deep-sea column; a chat between two kids sinks down the page, a depth-gauge timeline sits under it. Single dark ocean look by choice. */
+:root {
+  --abyss: #061a2b;
+  --sea: #0b3150;
+  --foam: #e8f6fb;
+  --kelp: #9fd8c4;
+  --mateo: #ffb347;
+  --lucia: #7fd6ff;
+  --muted: #8fb3c7;
+  --font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: linear-gradient(180deg, var(--sea) 0%, var(--abyss) 55%);
+  background-color: var(--abyss);
+  color: var(--foam);
+  font: 17px/1.55 var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 28px;
+}
+#mar { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+header { display: grid; gap: 10px; }
+.eyebrow { font: 600 13px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--kelp); }
+h1 {
+  font: 700 clamp(34px, 8vw, 56px)/1.02 var(--font-display);
+  margin: 0;
+  text-wrap: balance;
+}
+h1 em { font-style: normal; color: var(--mateo); }
+.intro { margin: 0; color: var(--muted); max-width: 52ch; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; }
+button {
+  font: 600 16px/1 var(--font-display);
+  border: 2px solid var(--foam);
+  background: var(--foam);
+  color: var(--abyss);
+  padding: 12px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+button.ghost { background: transparent; color: var(--foam); }
+button:focus-visible { outline: 3px solid var(--mateo); outline-offset: 3px; }
+button[disabled] { opacity: .45; cursor: default; }
+
+.chat { display: grid; gap: 14px; }
+.line { display: flex; gap: 10px; align-items: flex-end; }
+.line.lucia { flex-direction: row-reverse; }
+.avatar { flex: none; width: 44px; height: 44px; }
+.bubble {
+  min-width: 0;
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: rgba(232, 246, 251, .07);
+  border: 2px solid var(--who);
+}
+.mateo { --who: var(--mateo); }
+.lucia { --who: var(--lucia); }
+.mateo .bubble { border-bottom-left-radius: 6px; }
+.lucia .bubble { border-bottom-right-radius: 6px; }
+.name { display: block; font: 600 13px/1.2 var(--font-display); color: var(--who); letter-spacing: .04em; margin-bottom: 2px; }
+.bubble p { margin: 0; }
+.stage { font-style: italic; color: var(--muted); }
+
+.line.hide { display: none; }
+.line.pop { animation: pop .45s cubic-bezier(.2, 1.4, .4, 1) both; }
+@keyframes pop { from { transform: translateY(14px) scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
+.typing .bubble { display: flex; gap: 5px; padding: 16px 18px; }
+.typing i { width: 8px; height: 8px; border-radius: 50%; background: var(--who); animation: dot 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; }
+.typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+
+section.gauge { display: grid; gap: 14px; padding-top: 8px; border-top: 2px dashed rgba(159, 216, 196, .35); }
+h2 { font: 600 24px/1.2 var(--font-display); margin: 0; text-wrap: balance; }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ticks li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: center; }
+.ticks .ma { font: 700 18px/1 var(--font-display); font-variant-numeric: tabular-nums; text-align: right; color: var(--kelp); }
+.ticks .ma small { font: 400 12px var(--font-body); color: var(--muted); display: block; margin-top: 3px; }
+.bar { height: 30px; border-radius: 8px; background: var(--c); display: flex; align-items: center; padding-inline: 10px; font-weight: 700; color: var(--abyss); min-width: 0; white-space: nowrap; overflow: hidden; }
+.note { margin: 0; color: var(--muted); font-size: 15px; max-width: 60ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  .line.pop, .typing i { animation: none; }
+}
+</style>
+
+<canvas id="mar" aria-hidden="true"></canvas>
+
+<main class="wrap">
+  <header>
+    <span class="eyebrow">Una charla en el recreo</span>
+    <h1>Los tiburones son más antiguos que los <em>árboles</em></h1>
+    <p class="intro">Mateo le cuenta a Lucía lo que aprendió sobre los tiburones. Pulsa <b>Ver la charla</b> para que aparezca mensaje por mensaje.</p>
+    <div class="controls">
+      <button id="play" type="button">▶ Ver la charla</button>
+      <button id="next" type="button" class="ghost" hidden>Siguiente</button>
+      <button id="all" type="button" class="ghost" hidden>Mostrar todo</button>
+    </div>
+  </header>
+
+  <div class="chat" id="chat" aria-live="polite"></div>
+
+  <section class="gauge" aria-labelledby="g-title">
+    <h2 id="g-title">¿Quién llegó primero?</h2>
+    <ul class="ticks">
+      <li><span class="ma">≈ 420<small>millones de años</small></span><span class="bar" style="--c: var(--mateo); width: 100%">Primeros tiburones</span></li>
+      <li><span class="ma">≈ 385<small>millones de años</small></span><span class="bar" style="--c: var(--kelp); width: 91.7%">Primeros árboles</span></li>
+      <li><span class="ma">≈ 230<small>millones de años</small></span><span class="bar" style="--c: var(--lucia); width: 54.8%">Primeros dinosaurios</span></li>
+      <li><span class="ma">≈ 0,3<small>millones de años</small></span><span class="bar" style="--c: var(--foam); width: 3%" title="Primeros humanos"></span></li>
+    </ul>
+    <p class="note">La barra más corta son los humanos: llevamos unos 300 000 años. Las escamas de tiburón más antiguas podrían tener hasta 450 millones de años. Por sus esqueletos de cartílago, casi todo lo que sabemos de los tiburones antiguos viene de sus dientes.</p>
+  </section>
+</main>
+
+<script>
+const DIALOGO = [
+  ["mateo", "Lucía, ¿sabías que los tiburones son más antiguos que los árboles?"],
+  ["lucia", "¿Qué? ¡No puede ser! Los árboles siempre han estado ahí."],
+  ["mateo", "¡Pues no! Hace más de 400 millones de años los primeros tiburones ya nadaban en los mares. Los primeros árboles aparecieron hace unos 385 millones de años."],
+  ["lucia", "O sea que cuando nació el primer árbol, los tiburones ya llevaban un montón de tiempo nadando."],
+  ["mateo", "¡Exacto! Y son todavía más antiguos que los dinosaurios."],
+  ["lucia", "¿Más que el T. rex?"],
+  ["mateo", "Muchísimo más. Además han sobrevivido a varias extinciones masivas, esas veces en que casi toda la vida de la Tierra desapareció. ¡Y ellos siguieron nadando!"],
+  ["lucia", "¡Qué fuertes! ¿Y cómo saben todo eso los científicos? ¿Encuentran sus huesos?"],
+  ["mateo", "Ahí está lo curioso: los tiburones casi no tienen huesos. Su esqueleto es de cartílago, como lo que tenemos en la nariz y en las orejas."],
+  ["lucia", "<span class=\"stage\">(tocándose la oreja)</span> ¿Esto? Es blandito."],
+  ["mateo", "Sí, y por eso casi no deja fósiles. Casi todo lo que sabemos de ellos viene de sus dientes, que sí son duros y se conservan."],
+  ["lucia", "Entonces los dientes son como las pistas de un detective."],
+  ["mateo", "¡Justo! Pero hay algo triste: hoy muchos tiburones están en peligro."],
+  ["lucia", "¿Por qué? Si sobrevivieron a todo…"],
+  ["mateo", "Por la pesca excesiva, la contaminación y porque destruimos los lugares donde viven."],
+  ["lucia", "Entonces tenemos que cuidarlos."],
+  ["mateo", "Sí. Cuidar a los tiburones es proteger a uno de los sobrevivientes más antiguos de la Tierra."],
+  ["lucia", "Ya no les voy a tener tanto miedo. Les voy a tener respeto."]
+];
+
+const AVATAR = {
+  mateo: '<svg class="avatar" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="21" fill="#ffb347"/><path d="M6 17c3-11 29-13 32 0-6-4-12-5-16-2-4-3-11-2-16 2z" fill="#5b3413"/><circle cx="16" cy="23" r="2.6" fill="#061a2b"/><circle cx="28" cy="23" r="2.6" fill="#061a2b"/><path d="M15 30q7 6 14 0" stroke="#061a2b" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>',
+  lucia: '<svg class="avatar" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="21" fill="#7fd6ff"/><path d="M5 24C4 8 40 6 39 24c-3-7-9-10-17-10S8 17 5 24z" fill="#2a1a3d"/><circle cx="5" cy="27" r="4" fill="#2a1a3d"/><circle cx="39" cy="27" r="4" fill="#2a1a3d"/><circle cx="16" cy="24" r="2.6" fill="#061a2b"/><circle cx="28" cy="24" r="2.6" fill="#061a2b"/><path d="M16 31q6 5 12 0" stroke="#061a2b" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>'
+};
+const NOMBRE = { mateo: "Mateo", lucia: "Lucía" };
+
+const chat = document.getElementById("chat");
+const play = document.getElementById("play");
+const next = document.getElementById("next");
+const all = document.getElementById("all");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const lines = DIALOGO.map(([who, text]) => {
+  const el = document.createElement("div");
+  el.className = "line " + who;
+  el.innerHTML = AVATAR[who] + '<div class="bubble"><span class="name">' + NOMBRE[who] + "</span><p>" + text + "</p></div>";
+  chat.appendChild(el);
+  return el;
+});
+
+let i = 0, timer = null, typingEl = null;
+
+function clearTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+function showNext() {
+  clearTimeout(timer);
+  clearTyping();
+  if (i >= lines.length) return finish();
+  const el = lines[i++];
+  el.classList.remove("hide");
+  el.classList.add("pop");
+  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+  if (i >= lines.length) return finish();
+  const who = DIALOGO[i][0];
+  typingEl = document.createElement("div");
+  typingEl.className = "line typing " + who;
+  typingEl.innerHTML = AVATAR[who] + '<div class="bubble" aria-label="escribiendo"><i></i><i></i><i></i></div>';
+  chat.appendChild(typingEl);
+  const wait = 900 + DIALOGO[i - 1][1].length * 32;
+  timer = setTimeout(showNext, wait);
+}
+
+function finish() {
+  clearTimeout(timer);
+  clearTyping();
+  lines.forEach(l => l.classList.remove("hide"));
+  i = lines.length;
+  next.hidden = true; all.hidden = true;
+  play.textContent = "↻ Ver otra vez";
+}
+
+play.addEventListener("click", () => {
+  clearTimeout(timer); clearTyping();
+  lines.forEach(l => { l.classList.add("hide"); l.classList.remove("pop"); });
+  i = 0;
+  next.hidden = false; all.hidden = false;
+  play.textContent = "↻ Empezar de nuevo";
+  showNext();
+});
+next.addEventListener("click", showNext);
+all.addEventListener("click", finish);
+
+/* Fondo: burbujas y un tiburón que cruza el mar */
+const cv = document.getElementById("mar");
+const ctx = cv.getContext("2d");
+let W, H, bubbles = [], shark = { x: -200, y: 0, s: 1 };
+function size() {
+  const d = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * d; cv.height = H * d;
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+  bubbles = Array.from({ length: Math.round(W / 22) }, () => ({ x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 3.5, v: .2 + Math.random() * .6 }));
+  shark.y = H * .72;
+}
+function drawShark(x, y, s, t) {
+  ctx.save();
+  ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = "rgba(143,179,199,.22)";
+  const w = Math.sin(t / 180) * 6;
+  ctx.beginPath();
+  ctx.moveTo(90, 0);
+  ctx.quadraticCurveTo(60, -22, 0, -16);
+  ctx.lineTo(-12, -48); ctx.lineTo(-30, -14);
+  ctx.quadraticCurveTo(-70, -10, -100, -4);
+  ctx.lineTo(-130, -34 + w); ctx.lineTo(-118, 0); ctx.lineTo(-132, 30 + w);
+  ctx.lineTo(-100, 6);
+  ctx.quadraticCurveTo(-40, 18, 10, 14);
+  ctx.lineTo(-6, 34); ctx.lineTo(28, 14);
+  ctx.quadraticCurveTo(70, 14, 90, 0);
+  ctx.fill();
+  ctx.restore();
+}
+function frame(t) {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(232,246,251,.18)";
+  for (const b of bubbles) {
+    b.y -= b.v; if (b.y < -10) { b.y = H + 10; b.x = Math.random() * W; }
+    ctx.beginPath(); ctx.arc(b.x + Math.sin((t / 900) + b.y / 40) * 3, b.y, b.r, 0, 7); ctx.fill();
+  }
+  shark.x += .7; if (shark.x > W + 200) shark.x = -220;
+  drawShark(shark.x, shark.y + Math.sin(t / 1400) * 12, Math.max(.6, Math.min(1.2, W / 900)), t);
+  if (!reduce) requestAnimationFrame(frame);
+}
+size(); addEventListener("resize", () => { size(); if (reduce) frame(0); });
+if (reduce) frame(0); else requestAnimationFrame(frame);
+</script>
